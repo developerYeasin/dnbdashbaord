@@ -13,8 +13,9 @@ export default function Login() {
     setBusy(true); setErr('');
     try {
       const { data } = await api.post('/auth/login', f);
+      if (!data?.token) throw new Error('সার্ভার থেকে সঠিক উত্তর আসেনি — API URL (VITE_API_URL) ঠিক আছে কি না দেখুন');
       localStorage.setItem('dnb_token', data.token);
-      nav('/');
+      nav('/', { replace: true });
     } catch (e2) { setErr(errMsg(e2)); } finally { setBusy(false); }
   };
   return (

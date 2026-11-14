@@ -89,12 +89,19 @@ function Layout() {
   );
 }
 
+// Reads the token on every render (not once at App mount), so navigation right after login works
+function RequireAuth() {
+  let t = null;
+  try { t = localStorage.getItem('dnb_token'); } catch { /* ignore */ }
+  return t ? <Layout /> : <Navigate to="/login" replace />;
+}
+
 export default function App() {
   useTheme();
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-      <Route path="/*" element={localStorage.getItem('dnb_token') ? <Layout /> : <Navigate to="/login" />} />
+      <Route path="/*" element={<RequireAuth />} />
     </Routes>
   );
 }
